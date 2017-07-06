@@ -22,7 +22,18 @@ const Sidebar = (props) => {
         <h4>
           <Link className="btn btn-primary btn-block" to="/add-playlist">
             <span className="glyphicon glyphicon-plus"></span> PLAYLIST
-    </Link>
+          </Link>
+          <hr />
+          <ul className="list-unstyled">
+            {props.playlists.map(playlist => {
+              <li className="playlist-item menu-item">
+                <Link to="WHERE_TO_GO">playlist</Link>
+              </li>
+            })}
+            <li className="playlist-item menu-item">
+              <Link to="WHERE_TO_GO">another playlist</Link>
+            </li>
+          </ul>
         </h4>
       </section>
     </sidebar>

@@ -9,13 +9,30 @@ import Player from './Player';
 import NewPlaylist from './NewPlaylist';
 
 export default class Main extends Component {
+  constructor() {
+    super();
+    this.state = {
+      playlists: []
+    }
+  }
+
+  componentDidMount() {
+    axios.get('/api/playlists')
+      .then(res => res.data)
+      .then(result => {
+        this.setState({
+          playlists: result
+        })
+      })
+  }
+
 
   render() {
     return (
       <Router>
         <div id="main" className="container-fluid">
           <div className="col-xs-2">
-            <Sidebar />
+            <Sidebar playlists={this.state.playlists} />
           </div>
           <div className="col-xs-10">
             <Switch>

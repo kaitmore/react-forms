@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default class NewPlaylist extends Component {
   constructor(props) {
     super(props);
     this.state = {
       input: '',
-      valid: true
+      notValid: true,
+      edited: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -14,17 +16,21 @@ export default class NewPlaylist extends Component {
 
   handleChange(e) {
     this.setState({
-      input: e.target.value
+      input: e.target.value,
+      edited: true
+    }, () => {
+      if (this.state.input.length > 0 && this.state.input.length < 16) {
+        this.setState({
+          notValid: false
+        })
+      } else {
+        this.setState({
+          notValid: true
+        })
+      }
+
     })
-    if (this.state.input.length > 0 && this.state.input.length < 16) {
-      this.setState({
-        valid: false
-      })
-    } else {
-      this.setState({
-        valid: true
-      })
-    }
+
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -32,6 +38,15 @@ export default class NewPlaylist extends Component {
     this.setState({
       input: ''
     })
+
+    axios.post('/api/playlists',
+      {
+        name: this.state.input
+      })
+      .then(res => res.data)
+      .then(result => {
+        console.log(result) // response json from the server!
+      });
   }
 
   render() {
@@ -47,7 +62,8 @@ export default class NewPlaylist extends Component {
           </div>
           <div className="form-group">
             <div className="col-xs-10 col-xs-offset-2">
-              <button disabled={this.state.valid} type="submit" className="btn btn-success">Create Playlist</button>
+              <button disabled={this.state.notValid} type="submit" className="btn btn-success">Create Playlist</button>
+              {this.state.notValid && this.state.edited ? <div className="alert alert-warning">Please enter a name</div> : <div />}
             </div>
           </div>
         </fieldset>
