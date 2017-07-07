@@ -34,19 +34,11 @@ export default class NewPlaylist extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.input)
+    this.props.addPlaylist(this.state.input);
     this.setState({
       input: ''
     })
 
-    axios.post('/api/playlists',
-      {
-        name: this.state.input
-      })
-      .then(res => res.data)
-      .then(result => {
-        console.log(result) // response json from the server!
-      });
   }
 
   render() {
