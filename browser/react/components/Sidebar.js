@@ -25,10 +25,10 @@ const Sidebar = (props) => {
           </Link>
           <hr />
           <ul className="list-unstyled">
-            {console.log(props)}
+            {console.log('sidebar props', props)}
             {playlists.map((playlist, i) => {
               return < li key={i} className="playlist-item menu-item" >
-                <Link to="WHERE_TO_GO">{playlist.name}</Link>
+                <Link to={`/playlists/${playlist.id}`}> {playlist.name}</Link>
               </li>
             })}
           </ul>
