@@ -7,15 +7,14 @@ import Songs from './Songs';
 
 class SingleArtist extends React.Component {
 
-  constructor () {
+  constructor() {
     super();
     this.state = {
       artist: {}
     };
   }
 
-  componentDidMount () {
-    const artistId = this.props.match.params.artistId;
+  fetchArtistById(artistId) {
     const mainPath = `/api/artists/${artistId}`;
     const paths = [mainPath, `${mainPath}/albums`, `${mainPath}/songs`];
     Bluebird
@@ -28,7 +27,23 @@ class SingleArtist extends React.Component {
       });
   }
 
-  render () {
+  componentDidMount() {
+
+    const artistId = this.props.match.params.artistId;
+    this.fetchArtistById(artistId);
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    const nextArtistId = nextProps.match.params.artistId;
+    const currentartistId = this.props.match.params.artistId;
+    if (nextArtistId !== currentartistId) {
+      this.fetchArtistById(nextArtistId);
+    }
+  }
+
+  render() {
 
     const artist = this.state.artist;
     const albums = artist.albums || [];
@@ -36,7 +51,7 @@ class SingleArtist extends React.Component {
 
     return (
       <div>
-        <h3>{ artist.name }</h3>
+        <h3>{artist.name}</h3>
         <ul className="nav nav-tabs">
           <li><Link to={`/artists/${artist.id}/albums`}>ALBUMS</Link></li>
           <li><Link to={`/artists/${artist.id}/songs`}>SONGS</Link></li>
